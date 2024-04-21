@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    name: "build: ${{ matrix.arch }} ${{ matrix.config }} ${{ matrix.link }}"
+    name: "build: ${{ matrix.arch }}"
     strategy:
       fail-fast: false
       matrix:
