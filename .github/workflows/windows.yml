@@ -22,8 +22,9 @@ jobs:
         with:
           submodules: recursive
 
-
-      - uses: actions/cache@v4
+      # PREP libtorch
+      - name: ⚡ Prepare libtorch 
+        uses: actions/cache@v4
         id: libtorch
         with:
           path: libtorch
@@ -36,7 +37,10 @@ jobs:
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
         run: ls libtorch/libtorch/include/torch/csrc/autograd/
+      - name: check
+        run: which llvm-config
 
+      # Run cargo build
       - name: ⚡ Cargo Cache
         uses: actions/cache@v4
         with:
@@ -46,7 +50,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
-
       - name: ⚡ Cargo Target Cache
         uses: actions/cache@v4
         with:
@@ -55,12 +58,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo-target
-
-      - name: 🔨Build
+      - name: 🔨Cargo Build
         uses: actions-rs/cargo@v1
         with:
           command: build
         env:
           LIBTORCH: libtorch/libtorch/
-
 
