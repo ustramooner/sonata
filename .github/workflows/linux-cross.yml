@@ -1,4 +1,4 @@
-name: Windows
+name: Linux-Cross
 
 on:
   workflow_dispatch:
