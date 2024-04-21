@@ -17,17 +17,13 @@ jobs:
         arch: [x64]
 
     steps:
-      - name: check
-        run: which unzip
-      - name: Download libtorch 
+      - name: ⚡ Download libtorch 
         run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
-      - name: check
-        run: ls
-      - name: Extract libtorch
+      - name: ⚡ Extract libtorch
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
-        run: ls libtorch
-      - name: Checkout
+        run: ls libtorch/
+      - name: ⚡ Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -50,12 +46,11 @@ jobs:
             ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo-target
 
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-
-      - name: 🔨 Build
+      - name: 🔨Build
         uses: actions-rs/cargo@v1
         with:
           command: build
+        env:
+          LIBTORCH: libtorch
+
 
