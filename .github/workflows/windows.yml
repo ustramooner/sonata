@@ -21,11 +21,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: check
-        run: ls deps/espeak-ng
-      - name: check 2
-        run: which cargo
-      - name: check 3
-        run: which cmake
       - name: cargo
         run: cargo build
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
