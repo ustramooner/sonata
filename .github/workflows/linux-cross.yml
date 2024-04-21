@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    name: "build: ${{ matrix.arch }}"
+    name: "build: ${{ matrix.os }} ${{ matrix.arch }}: ${{ matrix.compiler }}"
     strategy:
       fail-fast: false
       matrix:
