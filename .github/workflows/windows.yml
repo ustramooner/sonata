@@ -37,7 +37,10 @@ jobs:
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
         run: |
-          echo GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}
+          echo LIBTORCH: ${LIBTORCH}
+          echo GITHUB_WORKSPACE: ${{GITHUB_WORKSPACE}}
+        env:
+          LIBTORCH: ${GITHUB_WORKSPACE}/libtorch/libtorch/
       - name: check
         run: ls libtorch/libtorch/include/torch/csrc/autograd/
       - name: check
