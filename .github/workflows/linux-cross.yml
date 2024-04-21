@@ -19,9 +19,9 @@ jobs:
     steps:
       - name: ⚡ Install Prerequisites
         run: |
-          add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
-          apt update
-          apt install llvm
+          sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
+          sudo apt update
+          sudo apt install llvm
 
       - name: ⚡ Checkout
         uses: actions/checkout@v4
