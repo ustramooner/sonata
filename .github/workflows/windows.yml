@@ -17,14 +17,19 @@ jobs:
         arch: [x64]
 
     steps:
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
-          path: libtorch.zip
+      - name: check
+        run: which curl
+      - name: check
+        run: which wget
+      - name: Download libtorch 
+        run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
       - name: check
         run: ls
-      
+      - uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq libtorch.zip -d libtorch
+      - name: check
+        run: ls libtorch
       - name: Checkout
         uses: actions/checkout@v4
         with:
