@@ -28,10 +28,10 @@ jobs:
         id: libtorch
         with:
           path: libtorch
-          key: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
+          key: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.1.0%2Bcpu.zip
       - name: ⚡ Download libtorch 
         if: steps.libtorch.outputs.cache-hit != 'true'
-        run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
+        run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.1.0%2Bcpu.zip
       - name: ⚡ Extract libtorch
         if: steps.libtorch.outputs.cache-hit != 'true'
         run: unzip -qq libtorch.zip -d libtorch
