@@ -36,7 +36,7 @@ jobs:
         if: steps.libtorch.outputs.cache-hit != 'true'
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
-        run: ls libtorch/libtorch/include/torch/csrc/autograd/
+        run: ls %cd%/libtorch/libtorch/include/torch/csrc/autograd/
       - name: check
         run: which clang++
 
@@ -63,5 +63,5 @@ jobs:
         with:
           command: build
         env:
-          LIBTORCH: libtorch/libtorch/
+          LIBTORCH: %cd%/libtorch/libtorch/
 
