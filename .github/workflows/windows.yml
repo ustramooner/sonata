@@ -17,28 +17,28 @@ jobs:
         arch: [x64]
 
     steps:
-      - name: ⚡ Download libtorch 
-        run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
-      - name: ⚡ Extract libtorch
-        run: unzip -qq libtorch.zip -d libtorch
-      - name: check
-        run: ls libtorch/libtorch/
-      - name: check
-        run: ls libtorch/libtorch/include
-      - name: check
-        run: ls libtorch/libtorch/include/torch/
-      - name: check
-        run: ls libtorch/libtorch/include/torch/csrc/
-      - name: check
-        run: ls libtorch/libtorch/include/torch/csrc/autograd
-        
       - name: ⚡ Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
+
+      - uses: actions/cache@v4
+        id: libtorch
+        with:
+          path: libtorch
+          key: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
+      - name: ⚡ Download libtorch 
+        if: steps.libtorch.outputs.cache-hit != 'true'
+        run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
+      - name: ⚡ Extract libtorch
+        if: steps.libtorch.outputs.cache-hit != 'true'
+        run: unzip -qq libtorch.zip -d libtorch
+      - name: check
+        run: ls libtorch/libtorch/include/torch/csrc/autograd/
+
       - name: ⚡ Cargo Cache
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/.cargo
           save-always: true
@@ -57,7 +57,7 @@ jobs:
             ${{ runner.os }}-cargo-target
 
       - name: 🔨Build
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v4
         with:
           command: build
         env:
