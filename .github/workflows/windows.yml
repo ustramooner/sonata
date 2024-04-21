@@ -23,6 +23,15 @@ jobs:
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
         run: ls libtorch/libtorch/
+      - name: check
+        run: ls libtorch/libtorch/include
+      - name: check
+        run: ls libtorch/libtorch/include/torch/
+      - name: check
+        run: ls libtorch/libtorch/include/torch/csrc/
+      - name: check
+        run: ls libtorch/libtorch/include/torch/csrc/autograd
+        
       - name: ⚡ Checkout
         uses: actions/checkout@v4
         with:
