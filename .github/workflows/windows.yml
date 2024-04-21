@@ -36,7 +36,10 @@ jobs:
         if: steps.libtorch.outputs.cache-hit != 'true'
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
-        run: ls ${GITHUB_WORKSPACE}/libtorch/libtorch/include/torch/csrc/autograd/
+        run: |
+          echo GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}
+      - name: check
+        run: ls libtorch/libtorch/include/torch/csrc/autograd/
       - name: check
         run: which clang++
 
