@@ -6,7 +6,8 @@
 	url = https://github.com/mush42/libtashkeel
 [submodule "deps/espeak-ng"]
 	path = deps/espeak-ng
-	url = https://github.com/rhasspy/espeak-ng
+	url = https://github.com/ustramooner/espeak-ng.git
+	branch = piper_tetun
 [submodule "deps/tqsm"]
 	path = deps/tqsm
-	url = C:\\Users\\ibnom\\temp\\tqsm
+	url = https://github.com/mush42/tqsm.git
