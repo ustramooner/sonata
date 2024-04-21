@@ -17,10 +17,19 @@ jobs:
         arch: [x64]
 
     steps:
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
+          path: libtorch.zip
+      - name: check
+        run: ls
+      
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
       - name: ⚡ Cargo Cache
         uses: actions/cache@v1
         with:
