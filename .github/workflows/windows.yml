@@ -1,0 +1,21 @@
+name: Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ piper_tetun ]
+  pull_request:
+    branches: [ piper_tetun ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: "build: ${{ matrix.arch }} ${{ matrix.config }} ${{ matrix.link }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x64]
+
+    steps:
+      - name: cargo
+        run: cargo build
