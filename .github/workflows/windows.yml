@@ -17,5 +17,13 @@ jobs:
         arch: [x64]
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: check
+        run: ls
+      - name: check 2
+        run: which cargo
+      - name: check 3
+        run: which cmake
       - name: cargo
         run: cargo build
