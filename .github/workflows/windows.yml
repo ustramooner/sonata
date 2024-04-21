@@ -38,7 +38,7 @@ jobs:
       - name: check
         run: |
           echo LIBTORCH: ${LIBTORCH}
-          echo GITHUB_WORKSPACE: ${github.workspace}}
+          echo GITHUB_WORKSPACE: ${github.workspace}
         env:
           LIBTORCH: ${GITHUB_WORKSPACE}/libtorch/libtorch/
       - name: check
