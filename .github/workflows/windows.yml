@@ -19,8 +19,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: check
-        run: ls
+        run: ls deps/espeak-ng
       - name: check 2
         run: which cargo
       - name: check 3
