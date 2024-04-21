@@ -22,7 +22,9 @@ jobs:
       - name: ⚡ Extract libtorch
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
-        run: find libtorch/
+        run: ls libtorch/
+      - name: check
+        run: ls libtorch/libtorch/
       - name: ⚡ Checkout
         uses: actions/checkout@v4
         with:
