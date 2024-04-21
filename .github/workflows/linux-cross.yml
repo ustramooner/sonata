@@ -17,6 +17,31 @@ jobs:
         arch: [x64]
 
     steps:
+
+      # PREP libtorch
+      - name: ⚡ Prepare libtorch 
+        uses: actions/cache@v4
+        id: libtorch
+        with:
+          path: libtorch
+          key: https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.2.2%2Bcpu.zip
+      - name: ⚡ Download libtorch 
+        if: steps.libtorch.outputs.cache-hit != 'true'
+        run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.2.2%2Bcpu.zip
+      - name: ⚡ Extract libtorch
+        if: steps.libtorch.outputs.cache-hit != 'true'
+        run: unzip -qq libtorch.zip -d libtorch
+      - name: check
+        run: |
+          echo LIBTORCH: ${LIBTORCH}
+          echo GITHUB_WORKSPACE: ${{github.workspace}}
+        env:
+          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
+      - name: check
+        run: ls libtorch/libtorch/include/torch/csrc/autograd/
+      - name: check
+        run: which clang++
+
       - name: ⚡ Install Prerequisites
         run: |
           #wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
@@ -52,4 +77,6 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
+        env:
+          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
 
