@@ -19,8 +19,6 @@ jobs:
     steps:
       - name: check
         run: which curl
-      - name: check
-        run: which wget
       - name: Download libtorch 
         run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.2.2%2Bcpu.zip
       - name: check
