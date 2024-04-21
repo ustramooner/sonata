@@ -38,7 +38,7 @@ jobs:
       - name: check
         run: ls libtorch/libtorch/include/torch/csrc/autograd/
       - name: check
-        run: which llvm-config
+        run: which clang++
 
       # Run cargo build
       - name: ⚡ Cargo Cache
