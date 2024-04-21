@@ -22,7 +22,7 @@ jobs:
       - name: ⚡ Extract libtorch
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
-        run: ls libtorch/
+        run: find libtorch/
       - name: ⚡ Checkout
         uses: actions/checkout@v4
         with:
@@ -46,11 +46,11 @@ jobs:
             ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo-target
 
-      - name: 🔨Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-        env:
-          LIBTORCH: libtorch
+      # - name: 🔨Build
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     command: build
+      #   env:
+      #     LIBTORCH: libtorch
 
 
