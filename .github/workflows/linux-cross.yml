@@ -19,8 +19,8 @@ jobs:
     steps:
       - name: ⚡ Install Prerequisites
         run: |
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-          sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
+          #wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+          #sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
           sudo apt update
           sudo apt install llvm libclang-dev libtorch-dev
 

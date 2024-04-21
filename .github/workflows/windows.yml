@@ -69,5 +69,5 @@ jobs:
         with:
           command: build
         env:
-          LIBTORCH: ${GITHUB_WORKSPACE}/libtorch/libtorch/
+          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
 
