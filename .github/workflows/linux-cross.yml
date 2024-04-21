@@ -17,6 +17,12 @@ jobs:
         arch: [x64]
 
     steps:
+      - name: ⚡ Install Prerequisites
+        run: |
+          add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
+          apt update
+          apt install llvm
+
       - name: ⚡ Checkout
         uses: actions/checkout@v4
         with:
