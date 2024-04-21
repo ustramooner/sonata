@@ -48,7 +48,6 @@ jobs:
           #sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
           sudo apt update
           sudo apt install -y llvm libclang-dev
-          sudo apt install -y libtorch-dev
 
       - name: ⚡ Checkout
         uses: actions/checkout@v4
