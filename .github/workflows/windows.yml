@@ -78,4 +78,6 @@ jobs:
           PROTOC: ${{github.workspace}}/protoc/bin/protoc
       - name: check
         if: always()
-        run: find . -name '*ucd*'
+        run: |
+          ls -la ./target/debug/build/
+          find . -name '*ucd*'
