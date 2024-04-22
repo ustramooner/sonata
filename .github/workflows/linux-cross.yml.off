@@ -78,7 +78,13 @@ jobs:
           command: build
         env:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
-      - name: check
-        if: always()
-        run: |
-          find . -name '*sonata-grpc*'
+      # - name: check
+      #   if: always()
+      #   run: |
+      #     find . -name '*sonata-grpc*'
+
+      - name: Upload Release
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug
+          path: './target/debug/**'

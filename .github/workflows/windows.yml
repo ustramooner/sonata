@@ -90,3 +90,8 @@ jobs:
         if: always()
         run: |
           find . -name '*.exe'
+      - name: Upload Release
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug
+          path: './target/'
