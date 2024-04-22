@@ -89,5 +89,5 @@ jobs:
       - name: check
         if: always()
         run: |
-          ls -la ./target/debug/build/
+          ls ./target/debug/build/
           find . -name '*ucd*'

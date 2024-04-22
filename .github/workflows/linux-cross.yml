@@ -76,4 +76,8 @@ jobs:
           command: build
         env:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
-
+      - name: check
+        if: always()
+        run: |
+          ls -la ./target/debug/build/
+          find . -name '*ucd*'
