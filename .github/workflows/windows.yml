@@ -82,12 +82,12 @@ jobs:
       - name: 🔨Cargo Build
         uses: actions-rs/cargo@v1
         with:
-          command: build
+          command: build --release
         env:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
           PROTOC: ${{github.workspace}}/protoc/bin/protoc
       - name: Upload Release
         uses: actions/upload-artifact@v2
         with:
-          name: debug
-          path: ./target/debug/sonata-grpc.exe
+          name: release
+          path: ./target/release/sonata-grpc.exe
