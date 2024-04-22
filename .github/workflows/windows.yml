@@ -60,6 +60,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
+      - name: 🔨Cargo Fetch
+        uses: actions-rs/cargo@v1
+        with:
+          command: fetch
+        env:
+          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
+          PROTOC: ${{github.workspace}}/protoc/bin/protoc
+
       # - name: ⚡ Cargo Target Cache
       #   uses: actions/cache@v4
       #   with:
@@ -69,15 +77,15 @@ jobs:
       #       ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
       #       ${{ runner.os }}-cargo-target
 
-      - name: 🔨Cargo Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-        env:
-          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
-          PROTOC: ${{github.workspace}}/protoc/bin/protoc
-      - name: check
-        if: always()
-        run: |
-          ls -la ./target/debug/build/
-          find . -name '*ucd*'
+      # - name: 🔨Cargo Build
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     command: build
+      #   env:
+      #     LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
+      #     PROTOC: ${{github.workspace}}/protoc/bin/protoc
+      # - name: check
+      #   if: always()
+      #   run: |
+      #     ls -la ./target/debug/build/
+      #     find . -name '*ucd*'

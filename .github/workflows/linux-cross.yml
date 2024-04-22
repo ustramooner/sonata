@@ -63,18 +63,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
-      - name: ⚡ Cargo Target Cache
-        uses: actions/cache@v4
-        with:
-          path: target
-          key: ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
-            ${{ runner.os }}-cargo-target
-      - name: 🔨Cargo Build
+      - name: 🔨Cargo Fetch
         uses: actions-rs/cargo@v1
         with:
-          command: build
+          command: fetch
         env:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
+
+      # - name: ⚡ Cargo Target Cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: target
+      #     key: ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
+      #       ${{ runner.os }}-cargo-target
+      # - name: 🔨Cargo Build
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     command: build
+      #   env:
+      #     LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
 
