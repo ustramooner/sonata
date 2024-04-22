@@ -89,7 +89,7 @@ jobs:
       - name: check
         if: always()
         run: |
-          find target
+          find ./target
       - name: Upload Release
         uses: actions/upload-artifact@v2
         with:
