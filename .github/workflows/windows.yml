@@ -70,24 +70,24 @@ jobs:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
           PROTOC: ${{github.workspace}}/protoc/bin/protoc
 
-      # - name: ⚡ Cargo Target Cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: target
-      #     key: ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
-      #       ${{ runner.os }}-cargo-target
+      - name: ⚡ Cargo Target Cache
+        uses: actions/cache@v4
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
+            ${{ runner.os }}-cargo-target
 
-      # - name: 🔨Cargo Build
-      #   uses: actions-rs/cargo@v1
-      #   with:
-      #     command: build
-      #   env:
-      #     LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
-      #     PROTOC: ${{github.workspace}}/protoc/bin/protoc
-      # - name: check
-      #   if: always()
-      #   run: |
-      #     ls -la ./target/debug/build/
-      #     find . -name '*ucd*'
+      - name: 🔨Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+        env:
+          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
+          PROTOC: ${{github.workspace}}/protoc/bin/protoc
+      - name: check
+        if: always()
+        run: |
+          ls -la ./target/debug/build/
+          find . -name '*ucd*'
