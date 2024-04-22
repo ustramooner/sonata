@@ -42,19 +42,10 @@ jobs:
       - name: ⚡ Extract libtorch
         if: steps.libtorch.outputs.cache-hit != 'true'
         run: unzip -qq libtorch.zip -d libtorch
-      - name: check
-        run: find ${{github.workspace}}/libtorch/libtorch/  -name torch.h
-
-      - name: check2
-        run: |
-          ls -la deps/sonic/
-      # find . -name torch_api.cpp
-      # c++ "-O0" "-ffunction-sections" "-fdata-sections" "-fPIC" "-gdwarf-4" "-fno-omit-frame-pointer" "-m64" "-I" "/home/runner/work/sonata/sonata/libtorch/libtorch/include" "-I" "/home/runner/work/sonata/sonata/libtorch/libtorch/include/torch/csrc/api/include" "-Wl,-rpath=/home/runner/work/sonata/sonata/libtorch/libtorch/lib" "-std=c++17" "-D_GLIBCXX_USE_CXX11_ABI=1" "-o" "/home/runner/work/sonata/sonata/target/debug/build/torch-sys-5709c3543e899933/out/19072f24a82f85ae-torch_api_generated.o" "-c" "libtch/torch_api.cpp"
-
-
 
       # Run cargo build
       - name: ⚡ Cargo Cache
+        id: cargo-fetch
         uses: actions/cache@v4
         with:
           path: ~/.cargo
@@ -65,6 +56,7 @@ jobs:
             ${{ runner.os }}-cargo
       - name: 🔨Cargo Fetch
         uses: actions-rs/cargo@v1
+        if: steps.cargo-fetch.outputs.cache-hit != 'true'
         with:
           command: fetch
         env:
