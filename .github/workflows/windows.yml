@@ -86,6 +86,10 @@ jobs:
         env:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
           PROTOC: ${{github.workspace}}/protoc/bin/protoc
+      - name: check
+        if: always()
+        run: |
+          find target
       - name: Upload Release
         uses: actions/upload-artifact@v2
         with:
