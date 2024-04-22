@@ -2,6 +2,14 @@
 resolver = "2"
 
 members = [
+    "sonata/core",
+    "sonata/synth",
+    "sonata/models/piper",
+    "sonata/models/vocoders",
+    "sonata-grpc",
+    "sonata-python",
+    "libsonata",
+    "sonata-cli",
     "espeak-phonemizer",
     "libtorch-inference",
     "sonic-sys",
