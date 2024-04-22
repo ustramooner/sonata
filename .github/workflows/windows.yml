@@ -90,4 +90,3 @@ jobs:
         if: always()
         run: |
           ls ./target/debug/build/
-          find . -name '*ucd*'
