@@ -22,6 +22,22 @@ jobs:
         with:
           submodules: recursive
 
+      # PREP protoc
+      - name: ⚡ Prepare protoc 
+        uses: actions/cache@v4
+        id: protoc
+        with:
+          path: protoc
+          key: https://github.com/protocolbuffers/protobuf/releases/download/v26.1/protoc-26.1-win64.zip
+      - name: ⚡ Download protoc 
+        if: steps.protoc.outputs.cache-hit != 'true'
+        run: curl -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v26.1/protoc-26.1-win64.zip
+      - name: ⚡ Extract protoc
+        if: steps.protoc.outputs.cache-hit != 'true'
+        run: unzip -qq protoc.zip -d protoc
+      - name: check protoc
+        run: ls protoc
+
       # PREP libtorch
       - name: ⚡ Prepare libtorch 
         uses: actions/cache@v4
@@ -70,4 +86,5 @@ jobs:
           command: build
         env:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
+          PROTOC: ${{github.workspace}}/protoc/bin/protoc/
 
