@@ -89,4 +89,4 @@ jobs:
       - name: check
         if: always()
         run: |
-          find . -name '*sonata-grpc*'
+          find . -name '*.exe'
