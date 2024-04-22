@@ -36,7 +36,7 @@ jobs:
         if: steps.protoc.outputs.cache-hit != 'true'
         run: unzip -qq protoc.zip -d protoc
       - name: check protoc
-        run: ls protoc
+        run: ls protoc/bin/
 
       # PREP libtorch
       - name: ⚡ Prepare libtorch 
@@ -86,5 +86,5 @@ jobs:
           command: build
         env:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
-          PROTOC: ${{github.workspace}}/protoc/bin/protoc/
+          PROTOC: ${{github.workspace}}/protoc/bin/protoc
 
