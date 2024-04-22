@@ -32,7 +32,7 @@ jobs:
         if: steps.libtorch.outputs.cache-hit != 'true'
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
-        run: find -name torch.h ${{github.workspace}}/libtorch/libtorch/
+        run: find ${{github.workspace}}/libtorch/libtorch/  -name torch.h
 
       - name: ⚡ Install Prerequisites
         run: |
