@@ -32,7 +32,7 @@ jobs:
         if: steps.libtorch.outputs.cache-hit != 'true'
         run: unzip -qq libtorch.zip -d libtorch
       - name: check
-        run: ls /home/runner/work/sonata/sonata/libtorch/libtorch/include
+        run: ls /home/runner/work/sonata/sonata/libtorch/libtorch/include/torch
 
       - name: ⚡ Install Prerequisites
         run: |
