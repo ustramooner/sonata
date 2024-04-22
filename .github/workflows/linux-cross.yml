@@ -24,10 +24,12 @@ jobs:
 
       - name: ⚡ Install Prerequisites
         run: |
-          #wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-          #sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
           sudo apt update
-          sudo apt install -y llvm libclang-dev protobuf-compiler
+          sudo apt install -y llvm libclang-dev
+
+          PB_REL="https://github.com/protocolbuffers/protobuf/releases"
+          curl -L -o /tmp/protoc.zip $PB_REL/download/v25.1/protoc-25.1-linux-x86_64.zip
+          unzip /tmp/protoc.zip -d /usr/local
 
       - name: protoc --version
         run: |
