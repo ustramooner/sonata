@@ -1,4 +1,4 @@
-name: Linux-Cross
+name: Linux
 
 on:
   workflow_dispatch:
