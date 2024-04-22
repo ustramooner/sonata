@@ -31,10 +31,6 @@ jobs:
           curl -L -o /tmp/protoc.zip $PB_REL/download/v25.1/protoc-25.1-linux-x86_64.zip
           sudo unzip /tmp/protoc.zip -d /usr/local
 
-      - name: protoc --version
-        run: |
-          protoc --version
-
       # PREP libtorch
       - name: ⚡ Prepare libtorch 
         uses: actions/cache@v4
@@ -85,5 +81,4 @@ jobs:
       - name: check
         if: always()
         run: |
-          ls -la ./target/debug/build/
-          find . -name '*ucd*'
+          find . -name '*sonata-grpc*'
