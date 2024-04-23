@@ -21,6 +21,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: check
+        run: |
+          git branch
+          cat .git/modules/deps/espeak-ng/config
+          cd deps/espeak-ng/ && git branch
 
       # PREP protoc
       - name: ⚡ Prepare protoc 
@@ -84,22 +89,22 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: release
-          path: ./target/release/sonata-grpc.exe
+          path: ./target/release/*.exe
 
-  upload_release:
-    runs-on: ubuntu-latest
-    #if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    needs: ["build"]
-    steps:
-    - uses: actions/checkout@v3
-    - name: download releases files
-      uses: actions/download-artifact@v3
-    - name: Display structure of downloaded files
-      run: ls -R
+  # upload_release:
+  #   runs-on: ubuntu-latest
+  #   #if: ${{ startsWith(github.ref, 'refs/tags/') }}
+  #   needs: ["build"]
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: download releases files
+  #     uses: actions/download-artifact@v3
+  #   - name: Display structure of downloaded files
+  #     run: ls -R
 
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: release/**
-        fail_on_unmatched_files: true
-        prerelease: ${{ contains(github.ref, '-') }}
+  #   - name: Release
+  #     uses: softprops/action-gh-release@v1
+  #     with:
+  #       files: release/**
+  #       fail_on_unmatched_files: true
+  #       prerelease: ${{ contains(github.ref, '-') }}
