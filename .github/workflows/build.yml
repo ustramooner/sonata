@@ -85,11 +85,16 @@ jobs:
         env:
           LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
           PROTOC: ${{github.workspace}}/protoc/bin/protoc
+      
+      - name: Prepare release
+        run: mv target/release/build/espeak-phonemizer-*/out/share/espeak-ng-data  target/release/espeak-ng-data
       - name: Upload Release
         uses: actions/upload-artifact@v2
         with:
           name: release
-          path: ./target/release/*.exe
+          path: |
+            ./target/release/*.exe
+            target/release/espeak-ng-data
 
   # upload_release:
   #   runs-on: ubuntu-latest
