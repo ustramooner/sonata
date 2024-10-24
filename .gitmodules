@@ -10,4 +10,4 @@
 	branch = piper_tetun
 [submodule "deps/tqsm"]
 	path = deps/tqsm
-	url = https://github.com/mush42/tqsm.git
+	url = https://github.com/mush42/tqsm
