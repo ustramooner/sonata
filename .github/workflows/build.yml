@@ -89,7 +89,7 @@ jobs:
       - name: Prepare release
         run: mv target/release/build/espeak-phonemizer-*/out/share/espeak-ng-data  target/release/espeak-ng-data
       - name: Upload Release
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: release
           path: |
