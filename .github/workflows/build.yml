@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ piper_tetun ]
+    tags: [ 'v*' ]
   pull_request:
     branches: [ piper_tetun ]
 
@@ -17,47 +18,27 @@ jobs:
         arch: [x64]
 
     steps:
-      - name: ⚡ Checkout
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: check
-        run: |
-          git branch
-          cat .git/modules/deps/espeak-ng/config
-          cd deps/espeak-ng/ && git branch
 
-      # PREP protoc
-      - name: ⚡ Prepare protoc 
+      # protoc is required by tonic (gRPC build)
+      - name: Prepare protoc cache
         uses: actions/cache@v4
         id: protoc
         with:
           path: protoc
-          key: https://github.com/protocolbuffers/protobuf/releases/download/v26.1/protoc-26.1-win64.zip
-      - name: ⚡ Download protoc 
+          key: protoc-26.1-win64
+      - name: Download protoc
         if: steps.protoc.outputs.cache-hit != 'true'
         run: curl -L -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v26.1/protoc-26.1-win64.zip
-      - name: ⚡ Extract protoc
+      - name: Extract protoc
         if: steps.protoc.outputs.cache-hit != 'true'
-        run: unzip -qq protoc.zip -d protoc
+        shell: pwsh
+        run: Expand-Archive -Path protoc.zip -DestinationPath protoc -Force
 
-      # PREP libtorch
-      - name: ⚡ Prepare libtorch 
-        uses: actions/cache@v4
-        id: libtorch
-        with:
-          path: libtorch
-          key: https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.1.0%2Bcpu.zip
-      - name: ⚡ Download libtorch 
-        if: steps.libtorch.outputs.cache-hit != 'true'
-        run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-2.1.0%2Bcpu.zip
-      - name: ⚡ Extract libtorch
-        if: steps.libtorch.outputs.cache-hit != 'true'
-        run: unzip -qq libtorch.zip -d libtorch
-
-      # Run cargo fetch
-      - name: ⚡ Cargo Cache
-        id: cargo-fetch
+      - name: Cargo cache
         uses: actions/cache@v4
         with:
           path: ~/.cargo
@@ -66,50 +47,50 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
-      - name: 🔨Cargo Fetch
-        uses: actions-rs/cargo@v1
-        if: steps.cargo-fetch.outputs.cache-hit != 'true'
-        with:
-          command: fetch
-        env:
-          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
-          PROTOC: ${{github.workspace}}/protoc/bin/protoc
 
-
-      # Run cargo build
-      - name: 🔨Cargo Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release
+      - name: Cargo fetch
+        run: cargo fetch
         env:
-          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
-          PROTOC: ${{github.workspace}}/protoc/bin/protoc
-      
-      - name: Prepare release
-        run: mv target/release/build/espeak-phonemizer-*/out/share/espeak-ng-data  target/release/espeak-ng-data
-      - name: Upload Release
-        uses: actions/upload-artifact@v3
+          PROTOC: ${{ github.workspace }}/protoc/bin/protoc.exe
+
+      - name: Cargo build
+        run: cargo build --release --package sonata-grpc
+        env:
+          PROTOC: ${{ github.workspace }}/protoc/bin/protoc.exe
+
+      - name: Prepare release artifacts
+        shell: pwsh
+        run: |
+          $buildDir = Get-ChildItem -Path "target/release/build" -Filter "espeak-phonemizer-*" | Select-Object -First 1
+          Move-Item "$($buildDir.FullName)/out/share/espeak-ng-data" "target/release/espeak-ng-data"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: release
+          name: sonata-windows-${{ matrix.arch }}
           path: |
-            ./target/release/*.exe
+            target/release/sonata-grpc.exe
             target/release/espeak-ng-data
 
-  # upload_release:
-  #   runs-on: ubuntu-latest
-  #   #if: ${{ startsWith(github.ref, 'refs/tags/') }}
-  #   needs: ["build"]
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: download releases files
-  #     uses: actions/download-artifact@v3
-  #   - name: Display structure of downloaded files
-  #     run: ls -R
+  release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: sonata-windows-x64
+          path: release/
 
-  #   - name: Release
-  #     uses: softprops/action-gh-release@v1
-  #     with:
-  #       files: release/**
-  #       fail_on_unmatched_files: true
-  #       prerelease: ${{ contains(github.ref, '-') }}
+      - name: Zip release
+        run: |
+          cd release
+          zip -r ../sonata-grpc.zip sonata-grpc.exe espeak-ng-data
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sonata-grpc.zip
+          prerelease: ${{ contains(github.ref, '-') }}
