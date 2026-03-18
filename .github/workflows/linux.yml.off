@@ -1,0 +1,90 @@
+name: Linux
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ piper_tetun ]
+  pull_request:
+    branches: [ piper_tetun ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    name: "build: ${{ matrix.os }} ${{ matrix.arch }}: ${{ matrix.compiler }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x64]
+
+    steps:
+      - name: ⚡ Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: ⚡ Install Prerequisites
+        run: |
+          sudo apt update
+          sudo apt install -y llvm libclang-dev
+
+          PB_REL="https://github.com/protocolbuffers/protobuf/releases"
+          curl -L -o /tmp/protoc.zip $PB_REL/download/v25.1/protoc-25.1-linux-x86_64.zip
+          sudo unzip /tmp/protoc.zip -d /usr/local
+
+      # PREP libtorch
+      - name: ⚡ Prepare libtorch 
+        uses: actions/cache@v4
+        id: libtorch
+        with:
+          path: libtorch
+          key: https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.1.0%2Bcpu.zip
+      - name: ⚡ Download libtorch 
+        if: steps.libtorch.outputs.cache-hit != 'true'
+        run: curl -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.1.0%2Bcpu.zip
+      - name: ⚡ Extract libtorch
+        if: steps.libtorch.outputs.cache-hit != 'true'
+        run: unzip -qq libtorch.zip -d libtorch
+
+      # Run cargo build
+      - name: ⚡ Cargo Cache
+        id: cargo-fetch
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo
+          save-always: true
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+            ${{ runner.os }}-cargo
+      - name: 🔨Cargo Fetch
+        uses: actions-rs/cargo@v1
+        if: steps.cargo-fetch.outputs.cache-hit != 'true'
+        with:
+          command: fetch
+        env:
+          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
+
+      # - name: ⚡ Cargo Target Cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: target
+      #     key: ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
+      #       ${{ runner.os }}-cargo-target
+      - name: 🔨Cargo Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+        env:
+          LIBTORCH: ${{github.workspace}}/libtorch/libtorch/
+      # - name: check
+      #   if: always()
+      #   run: |
+      #     find . -name '*sonata-grpc*'
+
+      - name: Upload Release
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug
+          path: './target/debug/**'
