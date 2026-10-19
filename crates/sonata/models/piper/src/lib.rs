@@ -153,6 +153,7 @@ pub struct ModelConfig {
     #[allow(dead_code)]
     num_symbols: u32,
     #[allow(dead_code)]
+    #[serde(default)]
     phoneme_map: HashMap<i64, char>,
     phoneme_id_map: HashMap<char, Vec<i64>>,
 }
