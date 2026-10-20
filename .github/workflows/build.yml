@@ -10,7 +10,8 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    # windows-latest is now a VS 2026 image, which cmake-rs 0.1.x cannot detect
+    runs-on: windows-2025
     name: "build: windows-${{ matrix.arch }}"
     strategy:
       fail-fast: false
