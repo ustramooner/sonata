@@ -8,6 +8,7 @@ use sonata_core::{
     Audio, AudioInfo, AudioSamples, AudioStreamIterator, Phonemes, SonataAudioResult, SonataError,
     SonataModel, SonataResult,
 };
+use sonata_text_rules::TextRules;
 use std::any::Any;
 use std::borrow::Cow;
 use std::collections::HashMap;
@@ -41,11 +42,21 @@ fn load_model_config(config_path: &Path) -> SonataResult<(ModelConfig, PiperSynt
             )))
         }
     };
-    let model_config: ModelConfig = match serde_json::from_reader(file) {
+    let mut model_config: ModelConfig = match serde_json::from_reader(file) {
         Ok(config) => config,
         Err(why) => {
             return Err(SonataError::FailedToLoadResource(format!(
                 "Faild to parse model config from file: `{}`. Caused by: `{}`",
+                config_path.display(),
+                why
+            )))
+        }
+    };
+    model_config.text_rules = match TextRules::for_config(config_path) {
+        Ok(rules) => rules.map(Arc::new),
+        Err(why) => {
+            return Err(SonataError::FailedToLoadResource(format!(
+                "Faild to load text rules for `{}`. Caused by: `{}`",
                 config_path.display(),
                 why
             )))
@@ -155,6 +166,9 @@ pub struct ModelConfig {
     #[allow(dead_code)]
     phoneme_map: HashMap<i64, char>,
     phoneme_id_map: HashMap<char, Vec<i64>>,
+    /// Rewriting rules shipped next to the voice (`name.textrules.json`); loaded by `load_model_config`, not part of the config file.
+    #[serde(skip)]
+    text_rules: Option<Arc<TextRules>>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -250,11 +264,15 @@ trait VitsModelCommons {
     }
     fn do_phonemize_text(&self, text: &str) -> SonataResult<Phonemes> {
         let config = self.get_config();
+        let text = match &config.text_rules {
+            Some(rules) => Cow::from(rules.apply(text)),
+            None => Cow::from(text),
+        };
         let text = if config.espeak.voice == "ar" {
-            let diacritized = self.diacritize_text(text)?;
+            let diacritized = self.diacritize_text(&text)?;
             Cow::from(diacritized)
         } else {
-            Cow::from(text)
+            text
         };
         let phonemes = match text_to_phonemes(&text, &config.espeak.voice, None, true, false) {
             Ok(ph) => ph,

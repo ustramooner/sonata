@@ -1,0 +1,126 @@
+{
+ "tables": {
+  "months": {
+   "1": "Janeiru",
+   "2": "Fevereiru",
+   "3": "Marsu",
+   "4": "Abríl",
+   "5": "Maiu",
+   "6": "Junhu",
+   "7": "Julhu",
+   "8": "Agostu",
+   "9": "Setembru",
+   "10": "Outubru",
+   "11": "Novembru",
+   "12": "Dezembru"
+  },
+  "units": {
+   "mm": "milímetru",
+   "cm": "sentímetru",
+   "km": "kilómetru",
+   "m": "metru",
+   "kg": "kilograma",
+   "mg": "miligrama",
+   "g": "grama",
+   "ml": "mililitru",
+   "l": "litru",
+   "t": "tonelada",
+   "ton": "tonelada",
+   "GB": "gigabait",
+   "MB": "megabait",
+   "KB": "kilobait",
+   "GHz": "gigahertz",
+   "Hz": "hertz"
+  },
+  "scales": {
+   "miliaun": "miliaun",
+   "biliaun": "biliaun",
+   "triliaun": "triliaun",
+   "milhaun": "miliaun",
+   "bilhaun": "biliaun",
+   "trilhaun": "triliaun"
+  }
+ },
+ "rules": [
+  {
+   "pattern": "\\bno\\s+sst\\b\\.?",
+   "replace": "ho selu-seluk tan",
+   "ignore_case": true
+  },
+  {
+   "pattern": "\\bsst\\.",
+   "replace": "ho selu-seluk tan",
+   "ignore_case": true
+  },
+  {
+   "pattern": "\\bDra\\.(?=\\s)",
+   "replace": "doutóra"
+  },
+  {
+   "pattern": "\\bDr\\.(?=\\s)",
+   "replace": "doutór"
+  },
+  {
+   "pattern": "\\bSra\\.(?=\\s)",
+   "replace": "senhora"
+  },
+  {
+   "pattern": "\\bSr\\.(?=\\s)",
+   "replace": "senhór"
+  },
+  {
+   "pattern": "\\bPr(?=\\s+[A-Z])",
+   "replace": "padre"
+  },
+  {
+   "pattern": "\\b(?:no|nu)\\.(?=\\s?\\d)",
+   "replace": "númeru",
+   "ignore_case": true
+  },
+  {
+   "pattern": "(?<![\\w.,])(\\d+(?:[.,]\\d+)?)\\s?(GHz|mm|cm|km|mg|ml|ton|GB|MB|KB|Hz|kg|m|g|l|t)\\b(?![.,]?\\d)",
+   "replace": "{{2|units}} $1"
+  },
+  {
+   "pattern": "(?:US\\s?\\$\\s?|\\$\\s?)(\\d+(?:[.,]\\d+)?)\\s+((?:mili|bili|trili)a?un|(?:mi|bi|tri)lhaun)\\b",
+   "replace": "dolar {{2|scales}} $1",
+   "ignore_case": true
+  },
+  {
+   "pattern": "(\\d+(?:[.,]\\d+)?)\\s+((?:mili|bili|trili)a?un|(?:mi|bi|tri)lhaun)\\b",
+   "replace": "{{2|scales}} $1",
+   "ignore_case": true
+  },
+  {
+   "pattern": "(?:\\bloron\\s+)?(?<![\\d./-])0?([1-9]|[12]\\d|3[01])([/.-])0?(1[0-2]|[1-9])\\2(\\d{4})(?![\\d/-])(?!\\.\\d)",
+   "replace": "loron $1, fulan {{3|months}}, tinan $4",
+   "ignore_case": true
+  },
+  {
+   "pattern": "(?:\\btuku\\s+)?(?<![\\d:])0?(\\d|1\\d|2[0-3])(?::|h)00(?![\\d:])",
+   "replace": "tuku $1",
+   "ignore_case": true
+  },
+  {
+   "pattern": "(?:\\btuku\\s+)?(?<![\\d:])0?(\\d|1\\d|2[0-3])(?::|h)0?([1-9]|[1-5]\\d)(?![\\d:])",
+   "replace": "tuku $1 liu minutu $2",
+   "ignore_case": true
+  },
+  {
+   "pattern": "(?<![\\d.,])(\\d+),00(?!\\d)",
+   "replace": "$1, virgula 0 0"
+  },
+  {
+   "pattern": "(?<![\\d.,])(\\d+),0(?!\\d)",
+   "replace": "$1, virgula 0"
+  },
+  {
+   "pattern": "(?<![\\d.,])(\\d+),0([1-9])(?!\\d)",
+   "replace": "$1, virgula 0 $2"
+  },
+  {
+   "pattern": "(?<![\\d.,])(\\d+),([1-9]\\d?)(?!\\d)",
+   "replace": "$1, virgula $2"
+  }
+ ]
+}

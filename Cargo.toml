@@ -3,6 +3,7 @@ resolver = "2"
 
 members = [
     "sonata/core",
+    "text-rules",
     "sonata/synth",
     "sonata/models/piper",
     "sonata/models/vocoders",
