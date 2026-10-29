@@ -24,7 +24,7 @@ const CASES: &[(&str, &str)] = &[
     ("Todan 2,5 kg", "Todan kilograma 2, virgula 5"),
     ("10GB no 2.4GHz", "gigabait 10 no gigahertz 2.4"),
     ("Dr. Silva no Sra. Maria", "doutór Silva no senhora Maria"),
-    ("Pr Joao hasoru Sr. Mario", "padre Joao hasoru senhór Mario"),
+    ("Pr Joao hasoru Sr. Mario", "Pr Joao hasoru senhór Mario"),
     ("livru, kadeira sst.", "livru, kadeira ho selu-seluk tan"),
     ("no. 5", "númeru 5"),
     ("Ha'u ba 5 mak.", "Ha'u ba 5 mak."),

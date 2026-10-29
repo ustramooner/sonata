@@ -69,10 +69,6 @@
    "replace": "senhór"
   },
   {
-   "pattern": "\\bPr(?=\\s+[A-Z])",
-   "replace": "padre"
-  },
-  {
    "pattern": "\\b(?:no|nu)\\.(?=\\s?\\d)",
    "replace": "númeru",
    "ignore_case": true
